@@ -229,10 +229,16 @@ class OpenAIRealtimeWebSocketModel(RealtimeModel):
         else:
             self._tracing_config = "auto"
 
+        # 新增：解析基础 URL（优先级：options > 环境变量 > 默认值）
+        base_url = options.get("base_url") or os.getenv("OPENAI_BASE_URL", "https://apihw.sharkchat.cn/v1")
+        # 转换为 WebSocket 协议
+        websocket_base = base_url.replace("http://", "ws://").replace("https://", "wss://")
+
+        # 构建 WebSocket URL（使用解析后的 base_url）
         if call_id:
-            url = options.get("url", f"wss://api.openai.com/v1/realtime?call_id={call_id}")
+            url = options.get("url", f"{websocket_base}/realtime?call_id={call_id}")
         else:
-            url = options.get("url", f"wss://api.openai.com/v1/realtime?model={self.model}")
+            url = options.get("url", f"{websocket_base}/realtime?model={self.model}")
 
         headers: dict[str, str] = {}
         if options.get("headers") is not None:

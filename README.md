@@ -1,3 +1,18 @@
+
+# SharkChat转发站的openAI SDK 适配包
+对默认的转发地址做了修订，使用说明：
+只需要终端中设置环境变量：
+
+```bash
+export OPENAI_BASE_URL="https://apihw.sharkchat.cn/v1"  # 转发站的link+v1 endpoint
+export OPENAI_API_KEY="YOUR_FORWARDER_API_KEY"  # 转发站的认证密钥
+```
+其它遵循 openAI SDK的环境安装和使用说明即可。
+实时模型（realtime）有待转发站提供开通（目前不可用）。
+非实时模型(大多数模型，包括response,conversation,completion等)，均可以正常使用。
+增加了“examples/basic/hello_world_forward.py”，用于展示自定义转发站和秘钥使用案例（不设定也可以使用，其它sample案例，只要不涉及realtime模型，都可以使用）
+
+
 # OpenAI Agents SDK [![PyPI](https://img.shields.io/pypi/v/openai-agents?label=pypi%20package)](https://pypi.org/project/openai-agents/)
 
 The OpenAI Agents SDK is a lightweight yet powerful framework for building multi-agent workflows. It is provider-agnostic, supporting the OpenAI Responses and Chat Completions APIs, as well as 100+ other LLMs.

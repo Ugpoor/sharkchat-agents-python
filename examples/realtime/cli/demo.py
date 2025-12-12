@@ -225,6 +225,7 @@ class NoUIDemo:
             model_config: RealtimeModelConfig = {
                 "playback_tracker": self.playback_tracker,
                 "initial_model_settings": {
+                    "model_name": "gpt-4o-mini-realtime-preview", # 可以删除，用默认的模型
                     "turn_detection": {
                         "type": "semantic_vad",
                         "interrupt_response": True,

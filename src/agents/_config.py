@@ -1,4 +1,5 @@
 from openai import AsyncOpenAI
+import os
 from typing_extensions import Literal
 
 from .models import _openai_shared
@@ -24,3 +25,8 @@ def set_default_openai_api(api: Literal["chat_completions", "responses"]) -> Non
         _openai_shared.set_use_responses_by_default(False)
     else:
         _openai_shared.set_use_responses_by_default(True)
+
+# 新增：可选接口，允许通过代码设置基础 URL（非必须，环境变量优先）
+def set_default_openai_base_url(url: str) -> None:
+    """设置默认 OpenAI 基础 URL（覆盖环境变量 OPENAI_BASE_URL）"""
+    _openai_shared.set_default_base_url(url)

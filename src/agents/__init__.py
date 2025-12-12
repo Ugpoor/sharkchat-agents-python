@@ -1,5 +1,6 @@
 import logging
 import sys
+import os
 from typing import Literal
 
 from openai import AsyncOpenAI
@@ -168,12 +169,22 @@ from .tracing import (
 from .usage import Usage
 from .version import __version__
 
+def _create_default_openai_client() -> AsyncOpenAI:
+    """创建默认的 OpenAI 客户端，支持通过环境变量配置基础 URL"""
+    # 优先获取转发站地址（默认使用 OpenAI 官方地址）
+    base_url = os.getenv("OPENAI_BASE_URL", "https://apihw.sharkchat.cn/v1")
+    # 从环境变量或已设置的默认密钥中获取 API Key
+    api_key = _config.get_default_openai_key() or os.getenv("OPENAI_API_KEY")
+    return AsyncOpenAI(
+        api_key=api_key,
+        base_url=base_url
+    )
 
 def set_default_openai_key(key: str, use_for_tracing: bool = True) -> None:
-    """Set the default OpenAI API key to use for LLM requests (and optionally tracing()). This is
-    only necessary if the OPENAI_API_KEY environment variable is not already set.
-
+    """Set the default OpenAI API key to use for LLM requests (and optionally tracing()). 
     If provided, this key will be used instead of the OPENAI_API_KEY environment variable.
+    （新增）默认客户端会自动读取从环境变量 OPENAI_BASE_URL 读取转发站地址，若未设置则使用 OpenAI 官方地址。
+
 
     Args:
         key: The OpenAI key to use.
